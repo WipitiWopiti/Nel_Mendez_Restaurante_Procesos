@@ -1,5 +1,5 @@
-import time
+import time, os
 
-print("Preparando pedido...")
+print("Preparación iniciada.")
+print(f"PID: {os.getpid()}")
 time.sleep(10)
-print("Pedido finalizado.")
