@@ -68,6 +68,11 @@ def cancelar_preparacion():
 def listar_pedidos_terminados():
     '''Muestra los pedidos terminados'''
 
+    print("===== PEDIDOS TERMINADOS =====")
+    for pedido in PEDIDOS:
+        if pedido[0].poll is not None:
+            print(f'''PID {pedido[0].pid} | {pedido[1]} | TERMINADO''')
+    return
 
 def cierre_limpio():
     '''Limpia todos los procesos antes de finalizar el programa'''
