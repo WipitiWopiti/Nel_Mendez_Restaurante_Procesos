@@ -39,10 +39,32 @@ def consultar_cocina():
             print(f'''PID {pedido[0].pid} | {pedido[1]} | PREPARANDO''')
         else:
             print(f'''PID {pedido[0].pid} | {pedido[1]} | TERMINADO''')
+    
+    return
 
 def cancelar_preparacion():
     '''Cancela un pedido a partir del PID'''
 
+    try:
+        pid_buscar = int(input("Introduzca el PID del pedido que desee terminar: "))
+    except:
+        print("El PID debe ser un numero")
+        return
+    
+    for pedido in PEDIDOS:
+        if pedido[0].pid == pid_buscar:
+            print("Pedido encontrado")
+            if pedido[0].poll() is None:
+                pedido[0].terminate()
+                pedido[0].wait()
+                print("El pedido ha sido finalizado correctamente")
+            else:
+                print("El pedido ya estaba finalizado")
+            return
+        
+    print("Pedido no encontrado")
+    return
+    
 def listar_pedidos_terminados():
     '''Muestra los pedidos terminados'''
 
