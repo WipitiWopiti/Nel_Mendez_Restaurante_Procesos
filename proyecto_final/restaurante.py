@@ -3,6 +3,30 @@ import subprocess, sys, os, time
 def crear_pedido():
     '''Crea un pedido con Popen() y muestra su información'''
 
+    plato = input("Introduzca el plato que desea: ")
+    try:
+        tiempo = int(input("Introduzca el tiempo de preparación: "))
+    except:
+        print("Debe introducir un numero entero.")
+        return
+    
+    print(f'''
+Nombre del plato: {plato}
+Tiempo: {tiempo} \n''')
+    
+    print("Pedido enviado a cocina")
+    envio_cocina = subprocess.Popen(
+            [sys.executable, "proyecto_final/cocina_final.py"],
+            stdin=subprocess.PIPE,
+            text=True
+        )
+    
+    # salida, errores = envio_cocina.communicate(input=f'''{plato}\n{tiempo}''')
+    # Encontré esto porque resulta que el communicate espera a que termine todo el hijo antes de mandar la respuesta
+    envio_cocina.stdin.write(f'''{plato}\n{tiempo}''')
+    envio_cocina.stdin.close()
+    return
+    
 def consultar_cocina():
     ''''Muestra todos los pedidos conocidos y su estado'''
 
@@ -35,13 +59,13 @@ RESTAURANTE PSP
 
         match inp:
             case 1:
-                pass
+                crear_pedido()
             case 2:
-                pass
+                consultar_cocina()
             case 3:
-                pass
+                cancelar_preparacion()
             case 4:
-                pass
+                listar_pedidos_terminados()
             case 5:
                 print("Adios")
                 exit()
