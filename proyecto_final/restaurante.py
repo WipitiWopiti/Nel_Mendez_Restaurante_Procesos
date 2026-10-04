@@ -69,6 +69,15 @@ def listar_pedidos_terminados():
     '''Muestra los pedidos terminados'''
 
 
+def cierre_limpio():
+    '''Limpia todos los procesos antes de finalizar el programa'''
+    
+    for pedido in PEDIDOS:
+        pedido[0].terminate()
+        pedido[0].wait()
+
+    return
+
 if __name__ == "__main__":
     
     PEDIDOS = []
@@ -101,7 +110,8 @@ RESTAURANTE PSP
             case 4:
                 listar_pedidos_terminados()
             case 5:
-                print("Adios")
+                cierre_limpio()
+                print("Todos los procesos han sido eliminados correctamente. Adios")
                 exit()
             case _:
                 print("Debe introducir un numero dentro de las opciones.")
