@@ -18,17 +18,27 @@ Tiempo: {tiempo} \n''')
     envio_cocina = subprocess.Popen(
             [sys.executable, "proyecto_final/cocina_final.py"],
             stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
             text=True
         )
     
     # salida, errores = envio_cocina.communicate(input=f'''{plato}\n{tiempo}''')
-    # Encontré esto porque resulta que el communicate espera a que termine todo el hijo antes de mandar la respuesta
+    # Encontré esto porque resulta que el communicate() espera a que termine todo el hijo antes de mandar la respuesta
     envio_cocina.stdin.write(f'''{plato}\n{tiempo}''')
     envio_cocina.stdin.close()
+    global PEDIDOS
+    PEDIDOS.append((envio_cocina, plato))
     return
     
 def consultar_cocina():
     ''''Muestra todos los pedidos conocidos y su estado'''
+    
+    print("===== ESTADO COCINA =====")
+    for pedido in PEDIDOS:
+        if pedido[0].poll() is None:
+            print(f'''PID {pedido[0].pid} | {pedido[1]} | PREPARANDO''')
+        else:
+            print(f'''PID {pedido[0].pid} | {pedido[1]} | TERMINADO''')
 
 def cancelar_preparacion():
     '''Cancela un pedido a partir del PID'''
@@ -38,6 +48,8 @@ def listar_pedidos_terminados():
 
 
 if __name__ == "__main__":
+    
+    PEDIDOS = []
     
     while True:
         time.sleep(1)
