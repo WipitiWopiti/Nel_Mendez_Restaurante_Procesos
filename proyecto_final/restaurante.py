@@ -1,4 +1,7 @@
-import subprocess, sys, os, time
+# He comentado solo las cosas que considero que requirieron un poco mas de creatividad porque 
+# tampoco veo practico comentarlo absolutamente todo
+
+import subprocess, sys, time
 
 def crear_pedido():
     '''Crea un pedido con Popen() y muestra su información'''
@@ -26,6 +29,9 @@ Tiempo: {tiempo} \n''')
     # Encontré esto porque resulta que el communicate() espera a que termine todo el hijo antes de mandar la respuesta
     envio_cocina.stdin.write(f'''{plato}\n{tiempo}''')
     envio_cocina.stdin.close()
+    
+    # Añadimos cada pedido como una tupla con el proceso para poder ver su información como el PID y el POLL
+    # lo agregamos con el nombre del plato ya que no podemos acceder a las variables dentro del proceso
     global PEDIDOS
     PEDIDOS.append((envio_cocina, plato))
     return
@@ -33,6 +39,7 @@ Tiempo: {tiempo} \n''')
 def consultar_cocina():
     ''''Muestra todos los pedidos conocidos y su estado'''
     
+    # Recorremos los pedidos preguntando el poll() para determinar si han terminado
     print("===== ESTADO COCINA =====")
     for pedido in PEDIDOS:
         if pedido[0].poll() is None:
@@ -85,6 +92,7 @@ def cierre_limpio():
 
 if __name__ == "__main__":
     
+    # Aqui guardaremos todos los pedidos, el formato es (proceso, plato)
     PEDIDOS = []
     
     while True:
@@ -93,10 +101,10 @@ if __name__ == "__main__":
 ===================================
 RESTAURANTE PSP
 ===================================\n
-1. Crear pedido \n
-2. Consultar cocina \n
-3. Cancelar preparación \n
-4. Ver pedidos terminados \n
+1. Crear pedido 
+2. Consultar cocina
+3. Cancelar preparación
+4. Ver pedidos terminados
 5. Salir \n''')
         
         try:
